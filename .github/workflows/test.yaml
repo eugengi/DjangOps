@@ -27,10 +27,13 @@
       name: Testing
       runs-on: ${{ matrix.os }}
       strategy:
+        fail-fast: false
         matrix:
           os:
             - ubuntu-latest
           python-version:
+            - "3.10"
+            - "3.11"
             - "3.12"
           toxenv:
             - django42
@@ -75,4 +78,4 @@
             DB_USER: ${{ secrets.DB_USER }}
             SECRET_KEY: ${{ secrets.SECRET_KEY }}
 
-          run: tox run
+          run: tox run --skip-pkg-install --skip-missing-interpreters false
