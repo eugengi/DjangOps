@@ -2,4 +2,5 @@
 -c constraints.txt
 
 tox                       # An automation and environment orchestrator.
+tox-gh                    # Plugin for GitHub Action support for `tox` 4+.
 tox-uv                    # Plugin replacing `virtualenv` and `pip` with `uv`.
