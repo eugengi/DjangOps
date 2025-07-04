@@ -35,9 +35,6 @@
             - "3.10"
             - "3.11"
             - "3.12"
-          toxenv:
-            - django42
-            - django50
 
       services:
         postgres:
@@ -63,7 +60,8 @@
 
         - name: Run Tests
           env:
-            TOX_ENV: ${{ matrix.toxenv }}
+            # tell `tox-gh` which mapping to use from the [gh] section.
+            TOX_GH_MAJOR_MINOR: ${{ matrix.python-version }}
 
             # env variables.
             ALLOWED_HOSTS: ${{ vars.ALLOWED_HOSTS }}
