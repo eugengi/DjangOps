@@ -14,6 +14,9 @@ runs:
       with:
         python-version: ${{ inputs.python-version }}
 
+    # TODO(eugengi):
+    # Remove after migration to use `pyproject.toml` to define dependencies.
+    # `setup-uv` reads the `uv` version in `pyproject.toml`.
     - name: Read UV version from file
       id: read-uv-version
       run: |
@@ -24,8 +27,13 @@ runs:
     - name: Install package manager
       uses: astral-sh/setup-uv@c893ac1cb213677f58b781341aba739a586833bf  # v6.3.1
       with:
+        enable-cache: true
+        cache-dependency-glob: |
+          **/requirements/ci.txt
+          **/requirements/uv.txt
+        python-version: ${{ inputs.python-version }}
         version: "${{ steps.read-uv-version.outputs.uv_version }}"
 
     - name: Install CI dependencies
-      run: python3 -m uv pip install --system --no-cache -r requirements/ci.txt
+      run: python3 -m uv pip install --system -r requirements/ci.txt
       shell: bash
