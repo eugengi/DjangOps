@@ -10,10 +10,10 @@ Note:
 """
 
 import re
-from typing import Self
 
 import pytest
 from django.core.exceptions import ImproperlyConfigured
+from typing_extensions import Self
 
 from src.config.constants import SETTINGS_MODULE
 from src.config.enums import Environment
