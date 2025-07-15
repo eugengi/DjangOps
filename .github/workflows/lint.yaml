@@ -4,9 +4,19 @@
     push:
       branches:
         - main
+      paths:
+        - 'src/**.py'
+        - 'tests/**.py'
+        - 'test_utils/**.py'
+        - '.github/workflows/lint.yaml'
     pull_request:
       branches:
         - "**"
+      paths:
+        - 'src/**.py'
+        - 'tests/**.py'
+        - 'test_utils/**.py'
+        - '.github/workflows/lint.yaml'
 
   jobs:
     lint:
