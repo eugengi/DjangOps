@@ -1,6 +1,6 @@
 ---
 name: Set Up Python
-description: Sets up Python and installs CI dependencies
+description: Sets up Python, Package Manager, and installs CI dependencies
 inputs:
   python-version:
     description: The Python version to set up
@@ -14,9 +14,18 @@ runs:
       with:
         python-version: ${{ inputs.python-version }}
 
-    - name: Install package manager
-      run: python3 -m pip install -r requirements/uv.txt
+    - name: Read UV version from file
+      id: read-uv-version
+      run: |
+        UV_VERSION=$(grep -E '^uv==[0-9.]+' requirements/uv.txt | cut -d '=' -f 3)
+        echo "uv_version=$UV_VERSION" >> "$GITHUB_OUTPUT"
       shell: bash
+
+    - name: Install package manager
+      uses: astral-sh/setup-uv@c893ac1cb213677f58b781341aba739a586833bf  # v6.3.1
+      with:
+        version: "${{ steps.read-uv-version.outputs.uv_version }}"
+
     - name: Install CI dependencies
       run: python3 -m uv pip install --system --no-cache -r requirements/ci.txt
       shell: bash
