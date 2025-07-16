@@ -8,6 +8,7 @@
         - 'src/**.py'
         - 'tests/**.py'
         - 'test_utils/**.py'
+        - '.github/actions/**/*.yaml'
         - '.github/workflows/lint.yaml'
     pull_request:
       branches:
@@ -16,6 +17,7 @@
         - 'src/**.py'
         - 'tests/**.py'
         - 'test_utils/**.py'
+        - '.github/actions/**/*.yaml'
         - '.github/workflows/lint.yaml'
 
   jobs:

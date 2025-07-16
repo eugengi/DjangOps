@@ -9,8 +9,8 @@
         - 'requirements/**'
         - 'tests/**'
         - 'test_utils/**'
+        - '.github/actions/**/*.yaml'
         - '.github/workflows/test.yaml'
-
     pull_request:
       branches:
         - "**"
@@ -19,6 +19,7 @@
         - 'requirements/**'
         - 'tests/**'
         - 'test_utils/**'
+        - '.github/actions/**/*.yaml'
         - '.github/workflows/test.yaml'
 
   jobs:
