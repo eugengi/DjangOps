@@ -1,16 +1,10 @@
 ---
   name: tests
   on:
-    push:
-      branches:
-        - main
-      paths:
-        - 'src/**'
-        - 'requirements/**'
-        - 'tests/**'
-        - 'test_utils/**'
-        - '.github/actions/**/*.yaml'
-        - '.github/workflows/test.yaml'
+    workflow_run:
+      workflows: ["build"]
+      types: [completed]
+      branches: [main]
     pull_request:
       branches:
         - "**"
@@ -23,8 +17,28 @@
         - '.github/workflows/test.yaml'
 
   jobs:
-    test:
+    check-build:
+      runs-on: ubuntu-latest
+      if: >
+        github.event.workflow_run.conclusion == 'success' ||
+        github.event_name == 'pull_request'
+      outputs:
+        should-run: ${{ steps.check.outputs.result }}
+      steps:
+        - name: Check build status
+          id: check
+          run: |
+            if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+              echo "result=true" >> $GITHUB_OUTPUT
+            elif [[ "${{ github.event.workflow_run.conclusion }}" == "success" ]]; then
+              echo "result=true" >> $GITHUB_OUTPUT
+            else
+              echo "result=false" >> $GITHUB_OUTPUT
+            fi
 
+    test:
+      needs: check-build
+      if: needs.check-build.outputs.should-run == 'true'
       name: Testing
       runs-on: ${{ matrix.os }}
       strategy:
@@ -36,6 +50,9 @@
             - "3.10"
             - "3.11"
             - "3.12"
+          django-version:
+            - django42
+            - django50
 
       services:
         postgres:
@@ -53,11 +70,39 @@
             POSTGRES_USER: ${{ secrets.DB_USER }}
 
       steps:
-        - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        - name: Checkout code
+          uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+        - name: Download build artifacts
+          uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+          with:
+            name: build-env-${{ matrix.os }}-py${{ matrix.python-version }}-${{ matrix.django-version }}
+          continue-on-error: true
+
         - name: Set up Python CI
           uses: ./.github/actions/setup-python-ci
           with:
             python-version: ${{ matrix.python-version }}
+
+        - name: Restore build cache
+          id: cache-restore
+          uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684  # v4.2.3
+          with:
+            path: |
+              .tox
+            key: |
+              build-${{ runner.os }} \
+              -py${{ matrix.python-version }} \
+              -${{ matrix.django-version }} \
+              -${{ hashFiles( 'requirements/base.txt', 'requirements/prod.txt', 'requirements/uv.txt') }}
+            restore-keys: |
+              build-${{ runner.os }}-py${{ matrix.python-version }}-${{ matrix.django-version }}-
+
+        - name: Fallback - recreate environment
+          if: steps.cache-restore.outputs.cache-hit != 'true'
+          run: |
+            echo "Cache miss detected, rebuilding tox environment..."
+            tox -e ${{ matrix.django-version }} --notest
 
         - name: Run Tests
           env:
