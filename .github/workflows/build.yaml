@@ -1,0 +1,101 @@
+---
+name: build
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - src/**
+      - tests/**
+      - test_utils/**
+      - .github/actions/**
+      - .github/workflows/**
+      - requirements/base.txt
+      - requirements/prod.txt
+      - requirements/test-ci.txt
+  pull_request:
+    branches:
+      - "**"
+    paths:
+      - src/**
+      - tests/**
+      - test_utils/**
+      - .github/actions/**
+      - .github/workflows/**
+      - requirements/base.txt
+      - requirements/prod.txt
+      - requirements/test-ci.txt
+
+jobs:
+  build:
+    name: Build environments
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: true
+      matrix:
+        os:
+          - ubuntu-latest
+        python-version:
+          - "3.10"
+          - "3.11"
+          - "3.12"
+        django-version:
+          - django42
+          - django50
+
+    outputs:
+      # Build artifacts meta to pass down to dependent workflows.
+      cache-key: ${{ steps.cache-key.outputs.key }}
+      build-success: ${{ steps.build-check.outputs.success }}
+      python-version: ${{ matrix.python-version }}
+      django-version: ${{ matrix.django-version }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          fetch-depth: 0
+
+      - name: Generate cache key
+        id: cache-key
+        run: |
+          echo "key=build-${{ runner.os }} \
+          -py${{ matrix.python-version }} \
+          -${{ matrix.django-version }} \
+          -${{ hashFiles( 'requirements/base.txt', 'requirements/prod.txt', 'requirements/uv.txt') }}" \
+          >> $GITHUB_OUTPUT
+
+      - name: Cache build environment
+        uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684  # v4.2.3
+        with:
+          path: |
+            .tox
+          key: ${{ steps.cache-key.outputs.key }}
+          restore-keys: >
+            build-${{ runner.os }}-py${{ matrix.python-version }}-${{
+            matrix.django-version }}-
+
+            build-${{ runner.os }}-py${{ matrix.python-version }}-
+
+      - name: Set up Python CI
+        uses: ./.github/actions/setup-python-ci
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Prepare build environment
+        run: |
+          tox -e ${{ matrix.django-version }} --notest
+
+      - name: Build check
+        id: build-check
+        run: |
+          echo "success=true" >> $GITHUB_OUTPUT
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-env-${{ matrix.os }}-py${{ matrix.python-version }}-${{
+            matrix.django-version }}
+          path: |
+            .tox
+          retention-days: 3
