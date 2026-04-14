@@ -17,9 +17,9 @@ updates:
       - "github-actions"
       - "upgrades"
     assignees:
-      - "apexDev37"
+      - "eugengi"
     reviewers:
-      - "apexDev37"
+      - "eugengi"
     target-branch: "main"
     open-pull-requests-limit: 3
     rebase-strategy: "auto"

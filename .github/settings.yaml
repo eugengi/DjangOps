@@ -8,7 +8,7 @@
 repository:
   name: DjangOps
   description: "A lean DevOps inspired template for perfectionists, with deadlines."
-  homepage: https://github.com/apexDev37/DjangOps
+  homepage: https://github.com/eugengi/DjangOps
   private: false
   has_issues: true
   has_projects: true

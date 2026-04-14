@@ -11,11 +11,11 @@ help: ## display this help message
 	@echo "Please use \`make <target>' where <target> is one of"
 	@awk -F ':.*?## ' '/^[a-zA-Z]/ && NF==2 {printf "\033[36m  %-25s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST) | sort
 
-# TODO(apexDev37)
+# TODO(eugengi)
 healthy: ## checks the compose app model is valid
 	@echo "The compose application model is valid"
 
-# TODO(apexDev37)
+# TODO(eugengi)
 sync: ## checks local and in-container interpreter/package manager are synced
 
 selfcheck: ## check that the Makefile is well-formed

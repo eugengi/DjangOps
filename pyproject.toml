@@ -63,12 +63,12 @@ classifiers = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/apexDev37/DjangOps"
-Repository = "https://github.com/apexDev37/DjangOps"
-Source = "https://github.com/apexDev37/DjangOps/tree/main/src"
-Documentation = "https://github.com/apexDev37/DjangOps/tree/main/docs"
-Changelog = "https://github.com/apexDev37/DjangOps/blob/main/CHANGELOG.md"
-"Bug Reports" = "https://github.com/apexDev37/DjangOps/issues"
+Homepage = "https://github.com/eugengi/DjangOps"
+Repository = "https://github.com/eugengi/DjangOps"
+Source = "https://github.com/eugengi/DjangOps/tree/main/src"
+Documentation = "https://github.com/eugengi/DjangOps/tree/main/docs"
+Changelog = "https://github.com/eugengi/DjangOps/blob/main/CHANGELOG.md"
+"Bug Reports" = "https://github.com/eugengi/DjangOps/issues"
 
 # ======================================================================================
 
