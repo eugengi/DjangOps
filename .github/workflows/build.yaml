@@ -11,8 +11,10 @@ on:
       - .github/actions/**
       - .github/workflows/**
       - requirements/base.txt
+      - requirements/ci.txt
       - requirements/prod.txt
       - requirements/test-ci.txt
+      - requirements/uv.txt
   pull_request:
     branches:
       - "**"
@@ -23,8 +25,10 @@ on:
       - .github/actions/**
       - .github/workflows/**
       - requirements/base.txt
+      - requirements/ci.txt
       - requirements/prod.txt
       - requirements/test-ci.txt
+      - requirements/uv.txt
 
 jobs:
   build:
