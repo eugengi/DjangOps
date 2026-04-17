@@ -47,12 +47,6 @@ jobs:
           - django42
           - django50
 
-    outputs:
-      # Build artifacts meta to pass down to dependent workflows.
-      cache-key: ${{ steps.cache-key.outputs.key }}
-      python-version: ${{ matrix.python-version }}
-      django-version: ${{ matrix.django-version }}
-
     steps:
       - name: Checkout code
         uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
@@ -62,7 +56,7 @@ jobs:
       - name: Generate cache key
         id: cache-key
         run: |
-          KEY="build-ubuntu-py${{ matrix.python-version }}-${{ matrix.django-version }}-${{ hashFiles( 'requirements/base.txt', 'requirements/prod.txt', 'requirements/test-ci.txt') }}"
+          KEY="build-${{ runner.os }}-py${{ matrix.python-version }}-${{ matrix.django-version }}-${{ hashFiles( 'requirements/base.txt', 'requirements/prod.txt', 'requirements/test-ci.txt') }}"
           echo "key=${KEY}" >> "$GITHUB_OUTPUT"
         shell: bash
 
@@ -83,13 +77,5 @@ jobs:
 
       - name: Prepare build environment
         run: |
-          tox -e ${{ matrix.django-version }} --notest
-
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a  # v7.0.1
-        with:
-          name: build-env-${{ matrix.os }}-py${{ matrix.python-version }}-${{
-            matrix.django-version }}
-          path: |
-            .tox
-          retention-days: 3
+          tox run -e ${{ matrix.django-version }} --notest
+        shell: bash

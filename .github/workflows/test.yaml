@@ -42,12 +42,6 @@
         - name: Checkout code
           uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
 
-        - name: Download build artifacts
-          uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
-          with:
-            name: build-env-${{ matrix.os }}-py${{ matrix.python-version }}-${{ matrix.django-version }}
-          continue-on-error: true
-
         - name: Set up Python CI
           uses: ./.github/actions/setup-python-ci
           with:
@@ -60,10 +54,7 @@
             path: |
               .tox
             key: |
-              build-${{ runner.os }} \
-              -py${{ matrix.python-version }} \
-              -${{ matrix.django-version }} \
-              -${{ hashFiles( 'requirements/base.txt', 'requirements/prod.txt', 'requirements/uv.txt') }}
+              build-${{ runner.os }}-py${{ matrix.python-version }}-${{ matrix.django-version }}-${{ hashFiles( 'requirements/base.txt', 'requirements/prod.txt', 'requirements/test-ci.txt') }}
             restore-keys: |
               build-${{ runner.os }}-py${{ matrix.python-version }}-${{ matrix.django-version }}-
 
@@ -71,7 +62,8 @@
           if: steps.cache-restore.outputs.cache-hit != 'true'
           run: |
             echo "Cache miss detected, rebuilding tox environment..."
-            tox -e ${{ matrix.django-version }} --notest
+            tox run -e ${{ matrix.django-version }} --notest
+          shell: bash
 
         - name: Run Tests
           env:
@@ -92,3 +84,4 @@
             SECRET_KEY: ${{ secrets.SECRET_KEY }}
 
           run: tox run --skip-pkg-install --skip-missing-interpreters false
+          shell: bash
