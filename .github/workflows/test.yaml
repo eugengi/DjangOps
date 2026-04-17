@@ -4,41 +4,10 @@
     workflow_run:
       workflows: ["build"]
       types: [completed]
-      branches: [main]
-    pull_request:
-      branches:
-        - "**"
-      paths:
-        - 'src/**'
-        - 'requirements/**'
-        - 'tests/**'
-        - 'test_utils/**'
-        - '.github/actions/**/*.yaml'
-        - '.github/workflows/test.yaml'
 
   jobs:
-    check-build:
-      runs-on: ubuntu-latest
-      if: >
-        github.event.workflow_run.conclusion == 'success' ||
-        github.event_name == 'pull_request'
-      outputs:
-        should-run: ${{ steps.check.outputs.result }}
-      steps:
-        - name: Check build status
-          id: check
-          run: |
-            if [[ "${{ github.event_name }}" == "pull_request" ]]; then
-              echo "result=true" >> $GITHUB_OUTPUT
-            elif [[ "${{ github.event.workflow_run.conclusion }}" == "success" ]]; then
-              echo "result=true" >> $GITHUB_OUTPUT
-            else
-              echo "result=false" >> $GITHUB_OUTPUT
-            fi
-
     test:
-      needs: check-build
-      if: needs.check-build.outputs.should-run == 'true'
+      if: github.event.workflow_run.conclusion == 'success'
       name: Testing
       runs-on: ${{ matrix.os }}
       strategy:
