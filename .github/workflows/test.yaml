@@ -47,19 +47,15 @@
           with:
             python-version: ${{ matrix.python-version }}
 
-        - name: Restore build cache
-          id: cache-restore
-          uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae  # v5.0.5
+        - name: Restore tox environment cache
+          id: read-cache
+          uses: ./.github/actions/cache-tox-env
           with:
-            path: |
-              .tox
-            key: |
-              build-${{ runner.os }}-py${{ matrix.python-version }}-${{ matrix.django-version }}-${{ hashFiles( 'requirements/base.txt', 'requirements/prod.txt', 'requirements/test-ci.txt') }}
-            restore-keys: |
-              build-${{ runner.os }}-py${{ matrix.python-version }}-${{ matrix.django-version }}-
+            python-version: ${{ matrix.python-version }}
+            django-version: ${{ matrix.django-version }}
 
-        - name: Fallback - recreate environment
-          if: steps.cache-restore.outputs.cache-hit != 'true'
+        - name: Fallback - recreate tox environment
+          if: steps.read-cache.outputs.cache-hit != 'true'
           run: |
             echo "Cache miss detected, rebuilding tox environment..."
             tox run -e ${{ matrix.django-version }} --notest

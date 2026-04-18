@@ -53,29 +53,18 @@ jobs:
         with:
           fetch-depth: 1  # Full history not required for build step.
 
-      - name: Generate cache key
-        id: cache-key
-        run: |
-          KEY="build-${{ runner.os }}-py${{ matrix.python-version }}-${{ matrix.django-version }}-${{ hashFiles( 'requirements/base.txt', 'requirements/prod.txt', 'requirements/test-ci.txt') }}"
-          echo "key=${KEY}" >> "$GITHUB_OUTPUT"
-        shell: bash
-
-      - name: Cache build environment
-        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae  # v5.0.5
-        with:
-          path: |
-            .tox
-          key: ${{ steps.cache-key.outputs.key }}
-          restore-keys: |
-            build-${{ runner.os }}-py${{ matrix.python-version }}-${{ matrix.django-version }}-
-            build-${{ runner.os }}-py${{ matrix.python-version }}-
-
       - name: Set up Python CI
         uses: ./.github/actions/setup-python-ci
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: Prepare build environment
+      - name: Restore tox environment cache
+        uses: ./.github/actions/cache-tox-env
+        with:
+          python-version: ${{ matrix.python-version }}
+          django-version: ${{ matrix.django-version }}
+
+      - name: Prepare tox build environment
         run: |
           tox run -e ${{ matrix.django-version }} --notest
         shell: bash

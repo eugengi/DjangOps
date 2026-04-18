@@ -1,0 +1,44 @@
+---
+name: Cache Tox Environment
+description: >
+  Generates deterministic cache key and restores (or prepares to cache) the
+  .tox directory. Centralizes key logic to prevent drift between build and
+  downstream workflows.
+
+inputs:
+  python-version:
+    description: Python version from matrix (e.g. "3.10").
+    required: true
+  django-version:
+    description: |
+      Tox Django environment name from matrix (e.g. "django42");
+      See tox config file, tox.ini, at project root directory.
+    required: true
+
+outputs:
+  cache-hit:
+    description: |
+      `true` if an exact cache key match was restored.
+      `false` otherwise (including partial matches via `restore-keys`).
+    value: ${{ steps.restore-cache.outputs.cache-hit }}
+
+runs:
+  using: composite
+  steps:
+    - name: Generate cache key
+      id: cache-key
+      run: |
+        KEY="build-${{ runner.os }}-py${{ inputs.python-version }}-${{ inputs.django-version }}-${{ hashFiles( 'requirements/base.txt', 'requirements/prod.txt', 'requirements/test-ci.txt') }}"
+        echo "key=${KEY}" >> "$GITHUB_OUTPUT"
+      shell: bash
+
+    - name: Restore or cache tox environment
+      id: restore-cache
+      uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae  # v5.0.5
+      with:
+        path: |
+          .tox
+        key: ${{ steps.cache-key.outputs.key }}
+        restore-keys: |
+          build-${{ runner.os }}-py${{ inputs.python-version }}-${{ inputs.django-version }}-
+          build-${{ runner.os }}-py${{ inputs.python-version }}-
