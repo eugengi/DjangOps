@@ -79,5 +79,5 @@
             DB_USER: ${{ secrets.DB_USER }}
             SECRET_KEY: ${{ secrets.SECRET_KEY }}
 
-          run: tox run --skip-pkg-install --skip-missing-interpreters false
+          run: tox run --skip-pkg-install --skip-missing-interpreters false -vvv
           shell: bash

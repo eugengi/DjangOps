@@ -66,5 +66,5 @@ jobs:
 
       - name: Prepare tox build environment
         run: |
-          tox run -e ${{ matrix.django-version }} --notest
+          tox run -e ${{ matrix.django-version }} --notest -vvv
         shell: bash
