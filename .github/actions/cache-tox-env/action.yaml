@@ -28,7 +28,7 @@ runs:
     - name: Generate cache key
       id: cache-key
       run: |
-        KEY="build-${{ runner.os }}-py${{ inputs.python-version }}-${{ inputs.django-version }}-${{ hashFiles( 'requirements/base.txt', 'requirements/prod.txt', 'requirements/test-ci.txt') }}"
+        KEY="build-${{ runner.os }}-py${{ inputs.python-version }}-${{ inputs.django-version }}-${{ hashFiles( 'tox.ini', 'requirements/test-ci.txt') }}"
         echo "key=${KEY}" >> "$GITHUB_OUTPUT"
       shell: bash
 
@@ -39,6 +39,3 @@ runs:
         path: |
           .tox
         key: ${{ steps.cache-key.outputs.key }}
-        restore-keys: |
-          build-${{ runner.os }}-py${{ inputs.python-version }}-${{ inputs.django-version }}-
-          build-${{ runner.os }}-py${{ inputs.python-version }}-
