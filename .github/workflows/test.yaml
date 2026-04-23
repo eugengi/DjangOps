@@ -46,6 +46,7 @@
           uses: ./.github/actions/setup-python-ci
           with:
             python-version: ${{ matrix.python-version }}
+            cache-suffix: ${{ matrix.django-version }}
 
         - name: Restore tox environment cache
           uses: ./.github/actions/cache-tox-env
