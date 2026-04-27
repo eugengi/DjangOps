@@ -35,6 +35,8 @@ runs:
         cache-dependency-glob: |
           **/requirements/ci.txt
           **/requirements/uv.txt
+          **/requirements/test-ci.txt
+          tox.ini
         cache-suffix: ${{ inputs.cache-suffix }}
         python-version: ${{ inputs.python-version }}
         version: "${{ steps.read-uv-version.outputs.uv_version }}"
