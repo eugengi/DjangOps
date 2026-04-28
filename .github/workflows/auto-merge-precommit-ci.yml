@@ -1,0 +1,53 @@
+---
+name: Auto-merge pre-commit-ci hook upgrades
+on:
+  pull_request_target:
+    types: [opened, synchronize]
+  # Capture manual human approvals in real-time.
+  pull_request_review:
+    types: [submitted]
+
+# Cancel the previous approval/merge signaling run on a new commit pushed.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  pre-commit-reconciler:
+    name: Reconcile pre-commit-ci state and signal for auto-merge
+    runs-on: ubuntu-latest
+    if: |
+      github.event.pull_request.user.login == 'pre-commit-ci[bot]' &&
+      startsWith(github.head_ref, 'pre-commit-ci')
+
+    permissions:
+      pull-requests: write
+      contents: write
+
+    steps:
+      - name: Audit PR approval state
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+        run: |
+          SHA="${{ github.event.pull_request.head.sha }}"
+          REVIEWS=$(gh pr view "$PR_URL" --json reviews --jq '.reviews')
+
+          if ! echo "$REVIEWS" | jq -e 'any(.[]; .state == "APPROVED")' > /dev/null; then
+            echo "No approval found. Applying baseline trust..."
+            gh pr review "$PR_URL" \
+              --approve \
+              --body "Auto reviewed and approved pre-commit-ci hook upgrades at SHA \`$SHA\`. \
+                      Note: Trusted baseline approval. Standard safety checks apply."
+          else
+            echo "Approval already exists. Skipping redundant review."
+          fi
+
+      - name: Enable sync and signal auto-merge
+        uses: ./.github/actions/auto-sync-and-merge-pr-branch/action.yaml
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          pull-request-url: ${{ github.event.pull_request.html_url }}
