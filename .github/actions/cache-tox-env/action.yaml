@@ -25,10 +25,33 @@ outputs:
 runs:
   using: composite
   steps:
+
+    # TODO(eugengi):
+    # Remove after migration to use `pyproject.toml` to define dependencies.
+    # `setup-uv` reads the `uv` version in `pyproject.toml`.
+    - name: Read UV version from file
+      id: read-uv-version
+      run: |
+        UV_VERSION=$(grep -E '^uv==[0-9.]+' requirements/uv.txt | cut -d '=' -f 3)
+        echo "uv_version=$UV_VERSION" >> "$GITHUB_OUTPUT"
+      shell: bash
+
+    - name: Set up UV cache for tox
+      uses: astral-sh/setup-uv@c893ac1cb213677f58b781341aba739a586833bf  # v6.3.1
+      with:
+        enable-cache: true
+        cache-local-path: .cache/uv/test/tox
+        cache-dependency-glob: |
+          tox.ini
+          **/requirements/test-ci.txt
+        cache-suffix: "toxenv-${{ inputs.django-version }}"
+        python-version: ${{ inputs.python-version }}
+        version: "${{ steps.read-uv-version.outputs.uv_version }}"
+
     - name: Generate cache key
       id: cache-key
       run: |
-        KEY="build-${{ runner.os }}-py${{ inputs.python-version }}-${{ inputs.django-version }}-${{ hashFiles( 'tox.ini', 'requirements/test-ci.txt', 'requirements/ci.txt', 'requirements/uv.txt' ) }}"
+        KEY="build-${{ runner.os }}-py${{ inputs.python-version }}-${{ inputs.django-version }}-${{ hashFiles( 'tox.ini', 'requirements/test-ci.txt' ) }}"
         echo "key=${KEY}" >> "$GITHUB_OUTPUT"
       shell: bash
 
