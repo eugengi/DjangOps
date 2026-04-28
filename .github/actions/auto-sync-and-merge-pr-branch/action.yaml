@@ -1,0 +1,46 @@
+---
+name: Auto Sync & Merge PR
+description: Atomic branch synchronization and auto-merge signaling for PR.
+
+inputs:
+  github-token:
+    description: |
+      GitHub token for authenticating with GitHub CLI and API calls.
+      Required for PR review and merge operations.
+    required: true
+  pull-request-url:
+    description: |
+      Full URL of the pull request to review and merge.
+      Example: https://github.com/owner/repo/pull/123"
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Audit PR mergeability and sync
+      env:
+        GH_TOKEN: ${{ inputs.github-token }}
+        PR_URL: ${{ inputs.pull-request-url }}
+      run: |
+        STATE=$(gh pr view "$PR_URL" --json mergeStateStatus --jq '.mergeStateStatus')
+
+        if [ "$STATE" == "BEHIND" ]; then
+          echo "⚠️ This branch is out-of-date with the base branch. Triggering rebase to kickstart CI..."
+          gh pr update-branch "$PR_URL" --rebase
+          echo "✅ Rebase successful."
+          exit 0  # [Important] Explicitly stop; let the next trigger take over.
+        else
+          echo "✅ Branch state is $STATE. No sync required."
+        fi
+      shell: bash
+
+
+    - name: Signal rebase auto-merge
+      env:
+        GH_TOKEN: ${{ inputs.github-token }}
+        PR_URL: ${{ inputs.pull-request-url }}
+      run: |
+        # The merge is queued and handled by GitHub's backend state machine.
+        gh pr merge "$PR_URL" --auto --rebase
+        echo "Auto-merge (rebase) signaled to GitHub backend."
+      shell: bash
