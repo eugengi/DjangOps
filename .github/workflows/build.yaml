@@ -20,36 +20,34 @@ on:
       - "**"
 
 jobs:
-  changes:
+  # ----------------------------------------------------------------------------
+  # Chore(pre-job): Detect whether any build-relevant paths were modified.
+  # Produces `should-run` ── whether a build is needed, consumed below.
+  # ----------------------------------------------------------------------------
+  detect-changes:
     name: Change detection
-    runs-on: ubuntu-latest
-    outputs:
-      run-build: ${{ steps.detect-changes.outputs.code }}
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+    uses: ./.github/workflows/_detect-changes.yaml
+    with:
+      path-filters: |
+        code:
+          - src/**
+          - tests/**
+          - test_utils/**
+          - .github/actions/**
+          - .github/workflows/**
+          - requirements/base.txt
+          - requirements/ci.txt
+          - requirements/prod.txt
+          - requirements/test-ci.txt
+          - requirements/uv.txt
 
-      - name: Detect relevant file changes
-        id: detect-changes
-        uses: dorny/paths-filter@fbd0ab8f3e69293af611ebaee6363fc25e6d187d # v4.0.1
-        with:
-          filters: |
-            code:
-              '- src/**'
-              '- tests/**'
-              '- test_utils/**'
-              '- .github/actions/**'
-              '- .github/workflows/**'
-              '- requirements/base.txt'
-              '- requirements/ci.txt'
-              '- requirements/prod.txt'
-              '- requirements/test-ci.txt'
-              '- requirements/uv.txt'
-
+  # ----------------------------------------------------------------------------
+  # Core: Build across Python × Django versions matrix.
+  # ----------------------------------------------------------------------------
   build:
     name: Build environments
-    needs: changes
-    if: needs.changes.outputs.run-build == 'true'
+    needs: detect-changes
+    if: needs.detect-changes.outputs.should-run == 'true'
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -87,28 +85,16 @@ jobs:
           tox run -e ${{ matrix.django-version }} --notest -vvv
         shell: bash
 
-  build-status:
-    name: Build environment status
-    needs: [changes, build]
+  # ----------------------------------------------------------------------------
+  # Chore(post-job): Check and surface job status for branch-protection rules.
+  # Always runs ── signal whether the core job ran, was skipped, or failed.
+  # ----------------------------------------------------------------------------
+  check-status:
+    name: Check build status
+    needs: [detect-changes, build]
     if: always()
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check build results
-        run: |
-          CHANGES_RESULT="${{ needs.changes.result }}"
-          BUILD_RESULT="${{ needs.build.result }}"
-          RUN_BUILD="${{ needs.changes.outputs.run-build }}"
-
-          if [[ "$CHANGES_RESULT" != "success" ]]; then
-            echo "Changes job failed. Cannot determine if build was required."
-            exit 1
-          fi
-
-          if [[ "$RUN_BUILD" == "true" && "$BUILD_RESULT" != "success" ]]; then
-            echo "Build was required but did not succeed (result: $BUILD_RESULT)."
-            exit 1
-          fi
-
-          # Changes for relevant paths didn't match, so we expect a skip.
-          echo "Build passed or was intentionally skipped (run-build=$RUN_BUILD, result=$BUILD_RESULT)."
-          exit 0
+    uses: ./.github/workflows/_check-status.yaml
+    with:
+      gatekeeper-result: ${{ needs.detect-changes.result }}
+      job-result: ${{ needs.build.result }}
+      should-run: ${{ needs.detect-changes.outputs.should-run }}

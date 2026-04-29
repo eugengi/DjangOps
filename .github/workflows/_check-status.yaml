@@ -1,0 +1,76 @@
+---
+# Reusable workflow — Check status
+#
+# Provides a single, stable status-check surface that branch-protection
+# rules can pin to.  Evaluates whether a required job succeeded, failed,
+# or was legitimately skipped — and surfaces a consistent pass/fail signal
+# regardless of outcome.
+#
+# This workflow is the post-job counterpart to detect-changes.yaml.
+# It must be called with `if: always()` so it runs even when the guarded
+# job was skipped or failed.
+#
+# Canonical wiring pattern (see build.yaml for a full example):
+#
+#   jobs:
+#     check-status:
+#       needs: [detect-changes, your-job]
+#       if: always()
+#       uses: ./.github/workflows/check-status.yaml
+#       with:
+#         job-result:  ${{ needs.your-job.result }}
+#         should-run:  ${{ needs.detect-changes.outputs.should-run }}
+#
+
+name: Check status
+
+on:
+  workflow_call:
+    inputs:
+      gatekeeper-result:
+        description: >
+          The `result` of the pre-job detect-changes (gatekeeper)
+          (success | failure | cancelled | skipped).
+          Pass `needs.<job-id>.result` here.
+        type: string
+        required: true
+
+      job-result:
+        description: >
+          The `result` of the guarded core job
+          (success | failure | cancelled | skipped).
+          Pass `needs.<job-id>.result` here.
+        type: string
+        required: true
+
+      should-run:
+        description: >
+          The `should-run` output from the pre-job detect-changes call.
+          (true | false)
+          Used to distinguish an expected skip from an unexpected failure.
+        type: string
+        required: true
+
+jobs:
+  status:
+    name: Evaluate and report job status
+    runs-on: ubuntu-latest
+    steps:
+      - name: Evaluate result
+        env:
+          GATEKEEPER_RESULT: ${{ inputs.gatekeeper-result }}
+          JOB_RESULT: ${{ inputs.job-result }}
+          SHOULD_RUN: ${{ inputs.should-run }}
+        run: |
+          if [[ "$GATEKEEPER_RESULT" != "success" ]]; then
+            echo "::error::Detect changes job failed (result: $GATEKEEPER_RESULT). \
+                    Cannot determine if core job was required."
+            exit 1
+          fi
+
+          if [[ "$SHOULD_RUN" == "true" && "$JOB_RESULT" != "success" ]]; then
+            echo "::error::Job was required but did not succeed (result: $JOB_RESULT)."
+            exit 1
+          fi
+
+          echo "Status check passed (should-run=$SHOULD_RUN, result=$JOB_RESULT)."
