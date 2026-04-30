@@ -1,0 +1,60 @@
+---
+# Reusable workflow — Change detection
+#
+# Determines whether a set of paths relevant to a given workflow were
+# modified in the triggering event.  Produces a single boolean output
+# (`should-run`) that the caller uses to conditionally skip expensive jobs.
+#
+# Callers pass their own path-filter list; this workflow is entirely
+# agnostic of what those paths represent.
+#
+# Canonical wiring pattern (see build.yaml for a full example):
+#
+#   jobs:
+#     detect-changes:
+#       uses: ./.github/workflows/detect-changes.yaml
+#       with:
+#         path-filters: |
+#           code:
+#             - src/**
+#             - tests/**
+#
+#     your-job:
+#       needs: detect-changes
+#       if: needs.detect-changes.outputs.should-run == 'true'
+#       ...
+#
+
+name: Detect changes
+
+on:
+  workflow_call:
+    inputs:
+      path-filters:
+        description: >
+          YAML multiline string passed verbatim to dorny/paths-filter.
+          Must define exactly one filter key named `code`.
+          The `code` key drives the `should-run` output.
+        type: string
+        required: true
+
+    outputs:
+      should-run:
+        description: true if any of the filtered paths were modified; false otherwise.
+        value: ${{ jobs.changes.outputs.should-run }}
+
+jobs:
+  changes:
+    name: Detect relevant file changes
+    runs-on: ubuntu-latest
+    outputs:
+      should-run: ${{ steps.filter.outputs.code }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+
+      - name: Apply path filters
+        id: filter
+        uses: dorny/paths-filter@fbd0ab8f3e69293af611ebaee6363fc25e6d187d # v4.0.1
+        with:
+          filters: ${{ inputs.path-filters }}

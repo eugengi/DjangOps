@@ -18,21 +18,36 @@ on:
   pull_request:
     branches:
       - "**"
-    paths:
-      - src/**
-      - tests/**
-      - test_utils/**
-      - .github/actions/**
-      - .github/workflows/**
-      - requirements/base.txt
-      - requirements/ci.txt
-      - requirements/prod.txt
-      - requirements/test-ci.txt
-      - requirements/uv.txt
 
 jobs:
+  # ----------------------------------------------------------------------------
+  # Chore(pre-job): Detect whether any build-relevant paths were modified.
+  # Produces `should-run` ── whether a build is needed, consumed below.
+  # ----------------------------------------------------------------------------
+  detect-changes:
+    name: Change detection
+    uses: ./.github/workflows/_detect-changes.yaml
+    with:
+      path-filters: |
+        code:
+          - src/**
+          - tests/**
+          - test_utils/**
+          - .github/actions/**
+          - .github/workflows/**
+          - requirements/base.txt
+          - requirements/ci.txt
+          - requirements/prod.txt
+          - requirements/test-ci.txt
+          - requirements/uv.txt
+
+  # ----------------------------------------------------------------------------
+  # Core: Build across Python × Django versions matrix.
+  # ----------------------------------------------------------------------------
   build:
     name: Build environments
+    needs: detect-changes
+    if: needs.detect-changes.outputs.should-run == 'true'
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -69,3 +84,17 @@ jobs:
         run: |
           tox run -e ${{ matrix.django-version }} --notest -vvv
         shell: bash
+
+  # ----------------------------------------------------------------------------
+  # Chore(post-job): Check and surface job status for branch-protection rules.
+  # Always runs ── signal whether the core job ran, was skipped, or failed.
+  # ----------------------------------------------------------------------------
+  check-status:
+    name: Check build status
+    needs: [detect-changes, build]
+    if: always()
+    uses: ./.github/workflows/_check-status.yaml
+    with:
+      gatekeeper-result: ${{ needs.detect-changes.result }}
+      job-result: ${{ needs.build.result }}
+      should-run: ${{ needs.detect-changes.outputs.should-run }}
