@@ -45,7 +45,7 @@ repos:
       -   id: black
 
   -   repo: https://github.com/PyCQA/isort
-      rev: 8.0.1
+      rev: 9.0.0a3
       hooks:
       -   id: isort
           args: [
@@ -62,7 +62,7 @@ repos:
 
   # Linting
   -   repo: https://github.com/astral-sh/ruff-pre-commit
-      rev: v0.15.11
+      rev: v0.15.12
       hooks:
       -   id: ruff-check
           args: [--fix]
@@ -81,7 +81,7 @@ repos:
 
   # Code Quality
   -   repo: https://github.com/pre-commit/mirrors-mypy
-      rev: v1.20.1
+      rev: v1.20.2
       hooks:
       -   id: mypy
           args: [--config-file, pyproject.toml, --warn-unused-configs]
@@ -96,7 +96,7 @@ repos:
 
   # Documentation, Spelling
   -   repo: https://github.com/alessandrojcm/commitlint-pre-commit-hook
-      rev: v9.24.0
+      rev: v9.25.0
       hooks:
       -   id: commitlint
           stages: [commit-msg]
