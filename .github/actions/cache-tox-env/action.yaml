@@ -37,7 +37,7 @@ runs:
       shell: bash
 
     - name: Set up UV cache for tox
-      uses: astral-sh/setup-uv@c893ac1cb213677f58b781341aba739a586833bf  # v6.3.1
+      uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b  # v8.1.0
       with:
         enable-cache: true
         cache-local-path: .cache/uv/test/tox

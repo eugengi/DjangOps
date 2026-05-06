@@ -21,12 +21,12 @@ updates:
     reviewers:
       - "eugengi"
     target-branch: "main"
-    open-pull-requests-limit: 3
+    open-pull-requests-limit: 10
     rebase-strategy: "auto"
     ignore:
       - dependency-name: "actions/checkout"
-        update-types:
-          - "version-update:semver-major"
+        versions:
+          - "< 6"  # Uses minimum runner requirement: `node24` runtime.
     allow:
       - dependency-type: "direct"
       - dependency-type: "indirect"
