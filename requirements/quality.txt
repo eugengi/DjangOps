@@ -4,13 +4,15 @@ asgiref==3.11.1
     # via
     #   -r requirements/test.txt
     #   django
+ast-serialize==0.3.0
+    # via mypy
 bandit==1.9.4
     # via -r requirements/quality.in
 black==26.3.1
     # via -r requirements/quality.in
 cfgv==3.5.0
     # via pre-commit
-click==8.3.2
+click==8.3.3
     # via black
 colorama==0.4.6 ; sys_platform == 'win32'
     # via
@@ -36,11 +38,11 @@ execnet==2.1.2
     # via
     #   -r requirements/test.txt
     #   pytest-xdist
-filelock==3.25.2
+filelock==3.29.0
     # via
     #   python-discovery
     #   virtualenv
-identify==2.6.18
+identify==2.6.19
     # via pre-commit
 iniconfig==2.3.0
     # via
@@ -48,13 +50,13 @@ iniconfig==2.3.0
     #   pytest
 isort==8.0.1
     # via -r requirements/quality.in
-librt==0.9.0 ; platform_python_implementation != 'PyPy'
+librt==0.10.0 ; platform_python_implementation != 'PyPy'
     # via mypy
-markdown-it-py==4.0.0
+markdown-it-py==4.2.0
     # via rich
 mdurl==0.1.2
     # via markdown-it-py
-mypy==1.20.1
+mypy==2.0.0
     # via -r requirements/quality.in
 mypy-extensions==1.1.0
     # via
@@ -62,12 +64,12 @@ mypy-extensions==1.1.0
     #   mypy
 nodeenv==1.10.0
     # via pre-commit
-packaging==26.0
+packaging==26.2
     # via
     #   -r requirements/test.txt
     #   black
     #   pytest
-pathspec==1.0.4
+pathspec==1.1.1
     # via
     #   black
     #   mypy
@@ -81,13 +83,13 @@ pluggy==1.6.0
     #   -r requirements/test.txt
     #   pytest
     #   pytest-cov
-pre-commit==4.5.1
+pre-commit==4.6.0
     # via -r requirements/quality.in
-psycopg==3.3.3
+psycopg==3.3.4
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/test.txt
-psycopg-binary==3.3.3 ; implementation_name != 'pypy'
+psycopg-binary==3.3.4 ; implementation_name != 'pypy'
     # via -r requirements/test.txt
 pygments==2.20.0
     # via
@@ -106,7 +108,7 @@ pytest-django==4.12.0
     # via -r requirements/test.txt
 pytest-xdist==3.8.0
     # via -r requirements/test.txt
-python-discovery==1.2.2
+python-discovery==1.3.0
     # via virtualenv
 pytokens==0.4.1
     # via black
@@ -116,7 +118,7 @@ pyyaml==6.0.3
     #   pre-commit
 rich==15.0.0
     # via bandit
-ruff==0.15.10
+ruff==0.15.12
     # via -r requirements/quality.in
 sqlparse==0.5.5
     # via
@@ -129,10 +131,10 @@ typing-extensions==4.15.0
     #   -r requirements/test.txt
     #   mypy
     #   psycopg
-tzdata==2026.1 ; sys_platform == 'win32'
+tzdata==2026.2 ; sys_platform == 'win32'
     # via
     #   -r requirements/test.txt
     #   django
     #   psycopg
-virtualenv==21.2.3
+virtualenv==21.3.1
     # via pre-commit

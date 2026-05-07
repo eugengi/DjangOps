@@ -4,11 +4,15 @@ asgiref==3.11.1
     # via
     #   -r requirements/quality.txt
     #   django
+ast-serialize==0.3.0
+    # via
+    #   -r requirements/quality.txt
+    #   mypy
 bandit==1.9.4
     # via -r requirements/quality.txt
 black==26.3.1
     # via -r requirements/quality.txt
-cachetools==7.0.5
+cachetools==7.1.1
     # via
     #   -r requirements/ci.txt
     #   tox
@@ -18,7 +22,7 @@ cfgv==3.5.0
     #   pre-commit
 chardet==7.4.3
     # via diff-cover
-click==8.3.2
+click==8.3.3
     # via
     #   -r requirements/quality.txt
     #   black
@@ -56,14 +60,14 @@ execnet==2.1.2
     # via
     #   -r requirements/quality.txt
     #   pytest-xdist
-filelock==3.25.2
+filelock==3.29.0
     # via
     #   -r requirements/ci.txt
     #   -r requirements/quality.txt
     #   python-discovery
     #   tox
     #   virtualenv
-identify==2.6.18
+identify==2.6.19
     # via
     #   -r requirements/quality.txt
     #   pre-commit
@@ -75,11 +79,11 @@ isort==8.0.1
     # via -r requirements/quality.txt
 jinja2==3.1.6
     # via diff-cover
-librt==0.9.0 ; platform_python_implementation != 'PyPy'
+librt==0.10.0 ; platform_python_implementation != 'PyPy'
     # via
     #   -r requirements/quality.txt
     #   mypy
-markdown-it-py==4.0.0
+markdown-it-py==4.2.0
     # via
     #   -r requirements/quality.txt
     #   rich
@@ -89,7 +93,7 @@ mdurl==0.1.2
     # via
     #   -r requirements/quality.txt
     #   markdown-it-py
-mypy==1.20.1
+mypy==2.0.0
     # via -r requirements/quality.txt
 mypy-extensions==1.1.0
     # via
@@ -100,7 +104,7 @@ nodeenv==1.10.0
     # via
     #   -r requirements/quality.txt
     #   pre-commit
-packaging==26.0
+packaging==26.2
     # via
     #   -r requirements/ci.txt
     #   -r requirements/quality.txt
@@ -109,7 +113,7 @@ packaging==26.0
     #   pytest
     #   tox
     #   tox-uv-bare
-pathspec==1.0.4
+pathspec==1.1.1
     # via
     #   -r requirements/quality.txt
     #   black
@@ -130,13 +134,13 @@ pluggy==1.6.0
     #   pytest
     #   pytest-cov
     #   tox
-pre-commit==4.5.1
+pre-commit==4.6.0
     # via -r requirements/quality.txt
-psycopg==3.3.3
+psycopg==3.3.4
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/quality.txt
-psycopg-binary==3.3.3 ; implementation_name != 'pypy'
+psycopg-binary==3.3.4 ; implementation_name != 'pypy'
     # via -r requirements/quality.txt
 pygments==2.20.0
     # via
@@ -160,7 +164,7 @@ pytest-django==4.12.0
     # via -r requirements/quality.txt
 pytest-xdist==3.8.0
     # via -r requirements/quality.txt
-python-discovery==1.2.2
+python-discovery==1.3.0
     # via
     #   -r requirements/ci.txt
     #   -r requirements/quality.txt
@@ -179,7 +183,7 @@ rich==15.0.0
     # via
     #   -r requirements/quality.txt
     #   bandit
-ruff==0.15.10
+ruff==0.15.12
     # via -r requirements/quality.txt
 sqlparse==0.5.5
     # via
@@ -194,7 +198,7 @@ tomli-w==1.2.0
     # via
     #   -r requirements/ci.txt
     #   tox
-tox==4.53.0
+tox==4.53.1
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/ci.txt
@@ -202,9 +206,9 @@ tox==4.53.0
     #   tox-uv-bare
 tox-gh==1.7.1
     # via -r requirements/ci.txt
-tox-uv==1.35.1
+tox-uv==1.35.2
     # via -r requirements/ci.txt
-tox-uv-bare==1.35.1
+tox-uv-bare==1.35.2
     # via
     #   -r requirements/ci.txt
     #   tox-uv
@@ -213,16 +217,16 @@ typing-extensions==4.15.0
     #   -r requirements/quality.txt
     #   mypy
     #   psycopg
-tzdata==2026.1 ; sys_platform == 'win32'
+tzdata==2026.2 ; sys_platform == 'win32'
     # via
     #   -r requirements/quality.txt
     #   django
     #   psycopg
-uv==0.11.6
+uv==0.11.12
     # via
     #   -r requirements/ci.txt
     #   tox-uv
-virtualenv==21.2.3
+virtualenv==21.3.1
     # via
     #   -r requirements/ci.txt
     #   -r requirements/quality.txt

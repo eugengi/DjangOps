@@ -15,15 +15,15 @@ django-environ==0.13.0
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/base.txt
-gunicorn==25.3.0
+gunicorn==26.0.0
     # via -r requirements/prod.in
-packaging==26.0
+packaging==26.2
     # via gunicorn
-psycopg==3.3.3
+psycopg==3.3.4
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/base.txt
-psycopg-binary==3.3.3 ; implementation_name != 'pypy'
+psycopg-binary==3.3.4 ; implementation_name != 'pypy'
     # via -r requirements/base.txt
 sqlparse==0.5.5
     # via
@@ -33,7 +33,7 @@ typing-extensions==4.15.0 ; python_full_version < '3.13'
     # via
     #   -r requirements/base.txt
     #   psycopg
-tzdata==2026.1 ; sys_platform == 'win32'
+tzdata==2026.2 ; sys_platform == 'win32'
     # via
     #   -r requirements/base.txt
     #   django

@@ -12,17 +12,17 @@ execnet==2.1.2
     # via pytest-xdist
 iniconfig==2.3.0
     # via pytest
-packaging==26.0
+packaging==26.2
     # via pytest
 pluggy==1.6.0
     # via
     #   pytest
     #   pytest-cov
-psycopg==3.3.3
+psycopg==3.3.4
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/test-ci.in
-psycopg-binary==3.3.3 ; implementation_name != 'pypy'
+psycopg-binary==3.3.4 ; implementation_name != 'pypy'
     # via psycopg
 pygments==2.20.0
     # via pytest
@@ -39,5 +39,5 @@ pytest-xdist==3.8.0
     # via -r requirements/test-ci.in
 typing-extensions==4.15.0 ; python_full_version < '3.13'
     # via psycopg
-tzdata==2026.1 ; sys_platform == 'win32'
+tzdata==2026.2 ; sys_platform == 'win32'
     # via psycopg
