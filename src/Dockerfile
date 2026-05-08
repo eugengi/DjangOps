@@ -9,14 +9,14 @@ ARG TARGET=production
 # Stage 1: Build Environment
 # ======================================================================================
 
-ARG PYTHON_VERSION="3.12.11"
+ARG PYTHON_VERSION="3.12.13"
 ARG ALPINE_VERSION="3.23"
 FROM python:${PYTHON_VERSION}-alpine${ALPINE_VERSION} AS build-stage
 
 LABEL \
     author="Eugene Mwangi" \
     contact="mwangi.em37@gmail.com" \
-    version="0.7.1" \
+    version="0.7.2" \
     license="MIT"
 
 # set global directories for src to live across all stages.
