@@ -43,9 +43,5 @@ runs:
     # Skip installing uv package since setup-uv provisions uv binary.
     - name: Install CI dependencies
       run: |
-        echo "uv; sys_platform == 'never'" > overrides.txt
-        uv pip install \
-          --system \
-          -r requirements/ci.txt \
-          --overrides overrides.txt
+        uv sync --locked --no-default-groups --only-group ci
       shell: bash

@@ -10,11 +10,8 @@ on:
       - test_utils/**
       - .github/actions/**
       - .github/workflows/**
-      - requirements/base.txt
-      - requirements/ci.txt
-      - requirements/prod.txt
-      - requirements/test-ci.txt
-      - requirements/uv.txt
+      - pyproject.toml
+      - uv.lock
   pull_request:
     branches:
       - "**"
@@ -35,11 +32,8 @@ jobs:
           - test_utils/**
           - .github/actions/**
           - .github/workflows/**
-          - requirements/base.txt
-          - requirements/ci.txt
-          - requirements/prod.txt
-          - requirements/test-ci.txt
-          - requirements/uv.txt
+          - pyproject.toml
+          - uv.lock
 
   # ----------------------------------------------------------------------------
   # Core: Build across Python × Django versions matrix.
