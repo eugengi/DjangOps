@@ -34,29 +34,13 @@ export UV_REQUEST_TIMEOUT ?= 60
 
 uv: ## install pinned version of uv
 	python3 -m pip install -qU pip
-	python3 -m pip install -qr requirements/uv.txt
+	python3 -m pip install --group uv  # Requires pip >=v25.1 for group installs.
 
-UV_COMPILE_OPTS = --quiet --upgrade --universal
-UV_COMPILE = uv pip compile $(UV_COMPILE_OPTS)
-# Omit build-related tools and packages from the compiled output.
-UV_COMPILE_UNSAFE = $(UV_COMPILE) \
-	--no-emit-package pip \
-	--no-emit-package setuptools \
-	--no-emit-package wheel
+upgrade: uv ## upgrade all packages to the project's dependency constraints
+	uv lock --upgrade
 
-# [Important] Order requirements based on their include layer hierarchy!
-REQUIREMENTS_GROUPS := pip uv base ci test-ci prod test quality dev
-
-upgrade: export UV_CUSTOM_COMPILE_COMMAND=make upgrade
-upgrade: uv ## upgrade requirements/*.txt files with the latest packages satisfying requirements/*.in
-	@for group in $(REQUIREMENTS_GROUPS); do \
-		echo "Upgrading requirements/$$group.in -> requirements/$$group.txt"; \
-		CMD=$$( [ "$$group" = "pip" ] && echo "$(UV_COMPILE)" || echo "$(UV_COMPILE_UNSAFE)" ); \
-		$$CMD -o requirements/$$group.txt requirements/$$group.in; \
-	done
-
-requirements: clean_tox uv ## sync active environment with dev (all) requirements
-	uv pip sync -q requirements/dev.txt
+requirements: clean_tox uv ## sync uv dedicated environment (.venv) with all requirements (dev)
+	uv sync --locked --group dev
 
 # --------------------------------------------------------------------------------------
 # Setup

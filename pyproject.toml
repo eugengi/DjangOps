@@ -287,6 +287,14 @@ banned-module-level-imports = ["debug_toolbar",]
 [tool.ruff.lint.pydocstyle]
 convention = "google"
 
+# == UV ===================================================================================================
+# For more extensive config options
+# See: https://docs.astral.sh/ruff/settings
+# =================================================================================================== UV ==
+[tool.uv]
+managed = true
+default-groups = ["dev"]
+
 [dependency-groups]
 ci = [
     "tox>=4.53.1",
@@ -296,6 +304,9 @@ ci = [
 dev = [
     "diff-cover>=10.2.0",
     "django-debug-toolbar>=6.3.0",
+    {include-group = "ci"},
+    {include-group = "quality"},
+    {include-group = "test"},
 ]
 prod = [
     "dj-database-url>=3.1.2",
@@ -309,6 +320,7 @@ quality = [
     "mypy>=2.0.0",
     "pre-commit>=4.6.0",
     "ruff>=0.15.12",
+    {include-group = "test"},
 ]
 test = [
     "pytest-cov>=7.1.0",
@@ -318,9 +330,7 @@ test = [
 test-ci = [
     "django-environ>=0.13.0",
     "psycopg[binary]>=3.3.4",
-    "pytest-cov>=7.1.0",
-    "pytest-django>=4.12.0",
-    "pytest-xdist>=3.8.0",
+    {include-group = "test"},
 ]
 uv = [
     "uv>=0.11.12",
