@@ -40,8 +40,10 @@ runs:
         python-version: ${{ inputs.python-version }}
         version: "${{ steps.read-uv-version.outputs.uv_version }}"
 
-    # Skip installing uv package since setup-uv provisions uv binary.
+    # TODO(eugengi): Skip installing uv package since setup-uv provisions uv binary.
     - name: Install CI dependencies
+      env:
+        UV_PROJECT_ENVIRONMENT: ${{ env.pythonLocation }}
       run: |
         uv sync --locked --no-default-groups --only-group ci
       shell: bash
