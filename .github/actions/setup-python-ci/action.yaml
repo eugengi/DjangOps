@@ -18,16 +18,6 @@ runs:
       with:
         python-version: ${{ inputs.python-version }}
 
-    # TODO(eugengi):
-    # Remove after migration to use `pyproject.toml` to define dependencies.
-    # `setup-uv` reads the `uv` version in `pyproject.toml`.
-    - name: Read UV version from file
-      id: read-uv-version
-      run: |
-        UV_VERSION=$(grep -E '^uv==[0-9.]+' requirements/uv.txt | cut -d '=' -f 3)
-        echo "uv_version=$UV_VERSION" >> "$GITHUB_OUTPUT"
-      shell: bash
-
     - name: Install package manager
       uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b  # v8.1.0
       with:
@@ -38,7 +28,7 @@ runs:
           **/requirements/uv.txt
         cache-suffix: build-tools-${{ inputs.cache-suffix }}
         python-version: ${{ inputs.python-version }}
-        version: "${{ steps.read-uv-version.outputs.uv_version }}"
+        version-file: "pyproject.toml"
 
     # TODO(eugengi): Skip installing uv package since setup-uv provisions uv binary.
     - name: Install CI dependencies
