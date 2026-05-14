@@ -295,6 +295,10 @@ convention = "google"
 managed = true
 default-groups = ["dev"]
 required-version = "==0.11.14"
+# --- Prevent resolution and installation (direct + transitive)
+exclude-dependencies = [
+    "uv",  # Exclude `uv` package, prefer standalone global binary.
+]
 
 [dependency-groups]
 ci = [
@@ -332,7 +336,4 @@ test-ci = [
     "django-environ>=0.13.0",
     "psycopg[binary]>=3.3.4",
     {include-group = "test"},
-]
-uv = [
-    "uv>=0.11.12",
 ]

@@ -135,45 +135,62 @@ alt="Successful Django Install Page"
 
 ## Development
 
-This is an overview to prepare working with this repo locally.
+This is an overview to prepare working on this repo locally or developing your
+own project using this template.
 
-### Virtual Environment
+<!-- markdownlint-disable MD028 -->
+> [!IMPORTANT]
+> You want to set up locally, where you will be working. That entails
+installing the packages and tools required. We want to develop locally and sync
+our changes into our service container (portable runtime).  
 
-You can use any tool of your choice to create a [PEP 405 compliant] virtual
-environment. The following example uses `virtualenvwrapper` to create and
-manage virtual environments.
+> [!WARNING]
+> You want to avoid running and building your project on your local machine.
+This beats the purpose of Compose! We already have the setup. This gives us
+several benefits and helps us avoid even more pitfalls.  
 
-- Create a virtual environment
+> [!NOTE]
+> All following commands assume execution occurs at the project root.  
+<!-- markdownlint-enable MD028 -->
+
+### Install Package Manager
+
+First step of the local setup is to install `uv`. Packages are resolved into a
+`uv.lock` file. If you don't have `uv` installed on your machine, follow the
+official docs [guide].
+
+- Install `uv` standalone binary installer  
 
 ```bash
-mkvirtualenv -p python3.12 djangops-py312
+curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
 
-> 🛈 This will create a fully managed venv and activate the virtual environment
-by default.
+<!-- markdownlint-disable MD028 -->
+> 🛈 This installs a global, standalone `uv` binary on your system.
 
-If your environment is not activated from the above command or you encounter
-any issue, manually activate it with the following command.
-
-- Activate the virtual environment
-
-```bash
-workon djangops-py312
-```
+> [!CAUTION]
+> Avoid installing `uv` as a **PYPI package** (actually, we won't allow it)!
+This project is set up to work with the `uv` binary. Installing `uv` in the
+virtual environment (PYPI package) results in conflicts and errors.
+<!-- markdownlint-enable MD028 -->
 
 ### Dependencies
 
-> ⚠ All following commands assume execution occurs with an active virtual env
-at the project root.
-
-- Install requirements for development.
+- Install requirements for development
 
 ```bash
 make requirements
 ```
 
-> 🛈 This will install and sync the active environment with the
-pinned versions for your development dependencies, `requirements/dev.txt`.
+<!-- markdownlint-disable MD028 -->
+> 🛈 This will sync the dedicated environment with the locked versions for your
+dev dependencies (see `[tool.uv.dependency-groups.dev]`).
+
+> [!NOTE]
+> Notice we do not have an **active virtual environment**. If you come from a
+`pip` background, this might feel odd. `uv` doesn't follow the _concept_ of an
+"active virtual environment". Read more about this from the official [docs].
+<!-- markdownlint-enable MD028 -->
 
 - Set up `pre-commit` hooks
 
@@ -182,8 +199,8 @@ pre-commit install --install-hooks
 ```
 
 > 🛈 This one time setup installs the `pre-commit` script in your hidden
-`git/hooks` directory and installs all hook environments defined in the config
-file.
+`git/hooks` directory and installs all hook environments defined in the
+`pre-commit` config file.
 
 ### Runtime
 
@@ -235,7 +252,8 @@ Thanks SO - http://stackoverflow.com/questions/4823468/store-comments-in-markdow
 [secrets]: https://docs.docker.com/compose/use-secrets/
 
 <!-- Developing -->
-[PEP 405 compliant]: https://peps.python.org/pep-0405/#specification
+[guide]: https://docs.astral.sh/uv/getting-started/installation/
+[docs]: https://docs.astral.sh/uv/guides/migration/pip-to-project/#project-environments
 
 <!-- Licensing links -->
 
