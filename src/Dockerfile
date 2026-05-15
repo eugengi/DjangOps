@@ -11,7 +11,7 @@ ARG TARGET=production
 
 ARG PYTHON_VERSION="3.12.13"
 ARG ALPINE_VERSION="3.23"
-FROM python:${PYTHON_VERSION}-alpine${ALPINE_VERSION} AS build-stage
+FROM ghcr.io/astral-sh/uv:python${PYTHON_VERSION}-alpine${ALPINE_VERSION} AS build-stage
 
 LABEL \
     author="Eugene Mwangi" \
@@ -28,15 +28,15 @@ ENV APP=$BASE/src
 ENV UV_COMPILE_BYTECODE=1 \
     UV_SYSTEM_PYTHON=1 \
     UV_LINK_MODE=copy \
+    UV_NO_DEV=1 \
     UV_CACHE_DIR="/root/.cache/uv"
 
 # install app's base runtime dependencies.
-ENV UV_INSTALL="python3 -m uv pip install -r"
+ENV UV_INSTALL="uv sync --locked"
 RUN --mount=type=cache,target=${UV_CACHE_DIR} \
-    --mount=type=bind,source=./requirements/uv.txt,target=./requirements/uv.txt \
-    --mount=type=bind,source=./requirements/base.txt,target=./requirements/base.txt \
-    ${UV_INSTALL} ./requirements/uv.txt \
-    && ${UV_INSTALL} ./requirements/base.txt
+    --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
+    --mount=type=bind,source=uv.lock,target=uv.lock \
+    ${UV_INSTALL}
 
 # set shareable user and home arguments across stages.
 # this comes last so that custom user args don't force a reinstall of base deps.
@@ -81,8 +81,9 @@ FROM local-rootless AS env-testing
 
 ENV ENVIRONMENT=testing
 RUN --mount=type=cache,target=${UV_CACHE_DIR} \
-    --mount=type=bind,source=./requirements/test.txt,target=./requirements/test.txt \
-    ${UV_INSTALL} ./requirements/test.txt
+    --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
+    --mount=type=bind,source=uv.lock,target=uv.lock \
+    ${UV_INSTALL} --group test
 
 # ======================================================================================
 # Environment: development (inherits from local rootless)
@@ -90,10 +91,11 @@ RUN --mount=type=cache,target=${UV_CACHE_DIR} \
 
 FROM local-rootless AS env-develop
 
-ENV ENVIRONMENT=develop
+ENV ENVIRONMENT=develop UV_NO_DEV=0
 RUN --mount=type=cache,target=${UV_CACHE_DIR} \
-    --mount=type=bind,source=./requirements/dev.txt,target=./requirements/dev.txt \
-    ${UV_INSTALL} ./requirements/dev.txt
+    --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
+    --mount=type=bind,source=uv.lock,target=uv.lock \
+    ${UV_INSTALL} --group dev
 
 # ======================================================================================
 # Environment: production (inherits from rootless)
@@ -103,8 +105,9 @@ FROM rootless AS env-production
 
 ENV ENVIRONMENT=production
 RUN --mount=type=cache,target=${UV_CACHE_DIR} \
-    --mount=type=bind,source=./requirements/prod.txt,target=./requirements/prod.txt \
-    ${UV_INSTALL} ./requirements/prod.txt
+    --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
+    --mount=type=bind,source=uv.lock,target=uv.lock \
+    ${UV_INSTALL} --group prod
 
 # ======================================================================================
 # Final Stage: use build-arg to decide which environment to “bridge”

@@ -10,7 +10,8 @@ no-fail: false
 strict-labels: true
 disable-ignore-pragma: false
 trustedRegistries:
-  - docker.io
-  - "*.gcr.io"
+  - docker.io       # Official docker registry
+  - "*.gcr.io"      # GCP container registry
+  - "ghcr.io"       # GitHub container registry
 ignored:
   - DL3049

@@ -295,6 +295,7 @@ convention = "google"
 managed = true
 default-groups = ["dev"]
 required-version = "==0.11.14"
+package = false
 # --- Prevent resolution and installation (direct + transitive)
 exclude-dependencies = [
     "uv",  # Exclude `uv` package, prefer standalone global binary.
