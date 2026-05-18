@@ -6,12 +6,19 @@
 ARG TARGET=production
 
 # ======================================================================================
+# Stage 0: Provision the standalone uv binary
+# ======================================================================================
+
+ARG UV_VERSION="0.11.14"
+FROM ghcr.io/astral-sh/uv:${UV_VERSION} AS uv-binary
+
+# ======================================================================================
 # Stage 1: Build Environment
 # ======================================================================================
 
 ARG PYTHON_VERSION="3.12.13"
 ARG ALPINE_VERSION="3.23"
-FROM ghcr.io/astral-sh/uv:python${PYTHON_VERSION}-alpine${ALPINE_VERSION} AS build-stage
+FROM python:${PYTHON_VERSION}-alpine${ALPINE_VERSION} AS build-stage
 
 LABEL \
     author="Eugene Mwangi" \
@@ -30,6 +37,9 @@ ENV UV_COMPILE_BYTECODE=1 \
     UV_LINK_MODE=copy \
     UV_NO_DEV=1 \
     UV_CACHE_DIR="/root/.cache/uv"
+
+# provision package manager (changes frequently based on `uv` version in pyproject.toml)
+COPY --from=uv-binary /uv /usr/local/bin/uv
 
 # install app's base runtime dependencies.
 ENV UV_INSTALL="uv sync --locked"
