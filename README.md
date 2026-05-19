@@ -34,7 +34,6 @@ reference.
 │   │   └── connection-params.yaml
 │   ├── secrets
 │   └── storage.yaml
-├── requirements                        # Hosts all project dependencies.
 ├── src                                 # Hosts project source code (implicit namespace package).
 │   ├── config                          # The Django project (package).
 │   │   ├── settings                    # Django project environment settings (package).
@@ -45,7 +44,7 @@ reference.
 ├── Makefile                            # Base project automation recipes.
 ├── README.md  
 ├── compose.yaml                        # Base local compose app model.
-├── pyproject.toml                      # Hosts project tooling configs.
+├── pyproject.toml                      # Dependencies, project, tool configs.
 └── tox.ini                             # Automated test orchestration and interface.
 ```
 <!-- markdownlint-enable MD013 -->

@@ -194,7 +194,6 @@ norecursedirs = [
     "dist",
     "docs",
     "migrations",
-    "requirements",
     "resources",
     "venv",
 ]

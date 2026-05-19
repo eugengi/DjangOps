@@ -29,6 +29,10 @@ x-common-settings: &settings-restart-watch
   path: ../../../src/config/settings
   target: /usr/src/app/config/settings
 
+x-common-lockfile: &uv-lockfile-rebuild-watch
+  action: rebuild
+  path: ../../../uv.lock
+
 services:
   develop.watch:
     develop:
@@ -39,9 +43,7 @@ services:
         - *tools-sync-watch
         - *tox-sync-watch
         - *settings-restart-watch
-        # Include additional, custom sequences for watch actions.
-        - action: rebuild
-          path: ../../../requirements/dev.txt
+        - *uv-lockfile-rebuild-watch
 
   testing.watch:
     develop:
@@ -52,6 +54,4 @@ services:
         - *tools-sync-watch
         - *tox-sync-watch
         - *settings-restart-watch
-        # Include additional, custom sequences for watch actions.
-        - action: rebuild
-          path: ../../../requirements/test.txt
+        - *uv-lockfile-rebuild-watch

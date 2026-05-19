@@ -1,6 +1,0 @@
-# Core requirements for using this application
--c constraints.txt
-
-django                    # Web application framework.
-django-environ            # Configure Django with environment variables.
-psycopg[binary]           # Modern implementation of a PostgreSQL adapter for Python.

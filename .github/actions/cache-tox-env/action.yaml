@@ -32,8 +32,9 @@ runs:
         enable-cache: true
         cache-local-path: .cache/uv/test/tox
         cache-dependency-glob: |
+          pyproject.toml
           tox.ini
-          **/requirements/test-ci.txt
+          uv.lock
         cache-suffix: "toxenv-${{ inputs.django-version }}"
         python-version: ${{ inputs.python-version }}
         version-file: "pyproject.toml"
@@ -41,7 +42,7 @@ runs:
     - name: Generate cache key
       id: cache-key
       run: |
-        KEY="build-${{ runner.os }}-py${{ inputs.python-version }}-${{ inputs.django-version }}-${{ hashFiles( 'tox.ini', 'requirements/test-ci.txt' ) }}"
+        KEY="build-${{ runner.os }}-py${{ inputs.python-version }}-${{ inputs.django-version }}-${{ hashFiles( 'tox.ini', 'pyproject.toml', 'uv.lock' ) }}"
         echo "key=${KEY}" >> "$GITHUB_OUTPUT"
       shell: bash
 
