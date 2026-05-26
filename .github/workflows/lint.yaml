@@ -28,7 +28,7 @@
       strategy:
         matrix:
           os:
-            - ubuntu-latest
+            - ubuntu-24.04
           python-version:
             - "3.12"
           toxenv:

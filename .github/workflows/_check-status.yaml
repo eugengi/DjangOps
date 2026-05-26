@@ -54,7 +54,7 @@ on:
 jobs:
   status:
     name: Evaluate and report job status
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Evaluate result
         env:
