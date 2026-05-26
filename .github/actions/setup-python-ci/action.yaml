@@ -22,12 +22,11 @@ runs:
       uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b  # v8.1.0
       with:
         enable-cache: true
-        cache-local-path: .cache/uv/build/tools
         cache-dependency-glob: |
           pyproject.toml
           tox.ini
           uv.lock
-        cache-suffix: build-tools-${{ inputs.cache-suffix }}
+        cache-suffix: matrix-${{ inputs.cache-suffix }}
         python-version: ${{ inputs.python-version }}
         version-file: "pyproject.toml"
 
