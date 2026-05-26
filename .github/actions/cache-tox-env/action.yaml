@@ -29,7 +29,10 @@ runs:
     - name: Generate cache key
       id: cache-key
       run: |
-        KEY="build-${{ runner.os }}-py${{ inputs.python-version }}-${{ inputs.django-version }}-${{ hashFiles( 'tox.ini', 'pyproject.toml', 'uv.lock' ) }}"
+        RUNNER_PLATFORM="${{ runner.os }}-${{ runner.arch }}"
+        DEP_HASH="${{ hashFiles('tox.ini', 'pyproject.toml', 'uv.lock') }}"
+
+        KEY=$(echo "build-toxenv-${RUNNER_PLATFORM}-py${{ inputs.python-version }}-${{ inputs.django-version }}-${DEP_HASH}" | tr '[:upper:]' '[:lower:]')
         echo "key=${KEY}" >> "$GITHUB_OUTPUT"
       shell: bash
 
