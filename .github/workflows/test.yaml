@@ -72,5 +72,6 @@
             DB_USER: ${{ secrets.DB_USER }}
             SECRET_KEY: ${{ secrets.SECRET_KEY }}
 
-          run: tox run --skip-pkg-install --skip-missing-interpreters false -vvv
+          # Run tox in offline mode (bypass venv creation and installation).
+          run: tox run --skip-env-install --skip-missing-interpreters false -vvv
           shell: bash
