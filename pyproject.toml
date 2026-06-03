@@ -63,9 +63,9 @@ classifiers = [
 ]
 
 dependencies = [
-    "django>=4.2.30",
-    "django-environ>=0.13.0",
-    "psycopg[binary]>=3.3.4",
+    "django>=4.2.30,<5.0",
+    "django-environ>=0.13.0,<1.0",
+    "psycopg[binary]>=3.3.4,<4.0",
 ]
 
 [project.urls]
@@ -333,7 +333,7 @@ test = [
     "pytest-xdist>=3.8.0",
 ]
 test-ci = [
-    "django-environ>=0.13.0",
-    "psycopg[binary]>=3.3.4",
+    "django-environ>=0.13.0,<1.0",
+    "psycopg[binary]>=3.3.4,<4.0",
     {include-group = "test"},
 ]
