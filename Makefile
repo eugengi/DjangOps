@@ -32,14 +32,16 @@ selfcheck: ## check that the Makefile is well-formed
 
 export UV_REQUEST_TIMEOUT ?= 60
 
-uv: ## install pinned version of uv
-	python3 -m pip install -qU pip
-	python3 -m pip install --group uv  # Requires pip >=v25.1 for group installs.
+check-uv: ## check for uv binary available on system
+	@command -v uv >/dev/null 2>&1 || { \
+		echo "uv binary not found. Install via official guide: https://docs.astral.sh/uv/getting-started/installation/"; \
+		exit 1; \
+	}
 
-upgrade: uv ## upgrade all packages to the project's dependency constraints
+upgrade: check-uv ## upgrade all packages to the project's dependency constraints
 	uv lock --upgrade
 
-requirements: clean_tox uv ## sync uv dedicated environment (.venv) with all requirements (dev)
+requirements: clean_tox check-uv ## sync uv dedicated .venv with all requirements (dev)
 	uv sync --locked --group dev
 
 # --------------------------------------------------------------------------------------
