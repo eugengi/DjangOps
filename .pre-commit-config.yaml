@@ -113,3 +113,11 @@ repos:
       hooks:
       -   id: codespell
           files: \.(py|sh|md|rst|yml|yaml)$
+
+  # Package manager, Dependencies
+  - repo: https://github.com/astral-sh/uv-pre-commit
+    rev: 0.11.18
+    hooks:
+      # Warn if uv lockfile is not up-to-date.
+      -   id: uv-lock
+          args: ['--check']
