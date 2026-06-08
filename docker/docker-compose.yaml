@@ -2,7 +2,7 @@
 name: djangops
 services:
   db:
-    image: postgres:18.3-alpine3.23
+    image: postgres:18.4-alpine3.23
     container_name: postgres_db
     restart: unless-stopped
     shm_size: "134217728"
