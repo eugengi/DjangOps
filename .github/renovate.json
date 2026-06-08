@@ -1,0 +1,61 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    "docker:pinDigests",
+    "helpers:pinGitHubActionDigests"
+  ],
+
+  "baseBranchPatterns": ["main"],
+  "assignees": ["eugengi"],
+  "reviewers": ["eugengi"],
+  "rangeStrategy": "in-range-only",
+  "prConcurrentLimit": 10,
+  "schedule": ["at any time"],
+  "timezone": "Africa/Nairobi",
+
+  "labels": [
+    "dependencies",
+    "renovate",
+    "upgrades"
+  ],
+
+  "packageRules": [
+    {
+      "matchPackageNames": ["python"],
+      "matchManagers": ["dockerfile", "github-actions"],
+      "versioning": "pep440",
+      "allowedVersions": "<3.13.0"
+    },
+    {
+      "matchManagers": ["github-actions"],
+      "matchPackageNames": ["actions/checkout"],
+      "allowedVersions": ">=6"
+    },
+    {
+      "matchManagers": ["pep621"],
+      "matchDepTypes": [
+        "project.dependencies",
+        "project.optional-dependencies"
+      ],
+      "rangeStrategy": "in-range-only",
+      "addLabels": ["core", "critical"]
+    },
+    {
+      "matchManagers": ["pep621"],
+      "matchDepTypes": [
+        "dependency-groups.ci",
+        "dependency-groups.dev",
+        "dependency-groups.prod",
+        "dependency-groups.quality",
+        "dependency-groups.test"
+      ],
+      "rangeStrategy": "bump",
+      "addLabels": ["local", "tools"]
+    }
+  ],
+
+  "semanticCommits": "enabled",
+  "semanticCommitType": "chore",
+  "semanticCommitScope": "deps"
+}
