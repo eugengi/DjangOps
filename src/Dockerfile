@@ -9,7 +9,7 @@ ARG TARGET=production
 # Stage 0: Provision the standalone uv binary
 # ======================================================================================
 
-ARG UV_VERSION="0.11.14"
+ARG UV_VERSION="0.11.19"
 FROM ghcr.io/astral-sh/uv:${UV_VERSION} AS uv-binary
 
 # ======================================================================================
