@@ -36,11 +36,12 @@
       "pinDigests": true
     },
     {
-      "description": "Enforce limit on core python version file",
+      "description": "Upgrade `.python-version` natively with pyenv manager",
+      "matchManagers": ["pyenv"],
       "matchPackageNames": ["python"],
-      "matchManagers": ["dockerfile", "github-actions"],
-      "versioning": "pep440",
-      "allowedVersions": "<3.13.0"
+      "groupName": "python-runtime",
+      "separateMinorPatch": true,
+      "allowedVersions": "<3.13"
     },
     {
       "description": "Enforce minimum version for expected node24 runtime",
