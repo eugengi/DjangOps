@@ -1,5 +1,7 @@
 fail_fast: false
 exclude: migrations/
+default_language_version:
+    python: python3.12.13
 
 ci:
     autofix_commit_msg: |
