@@ -15,6 +15,8 @@
   "schedule": ["after 6am and before 10pm every weekday"],
   "timezone": "Africa/Nairobi",
 
+  "minimumReleaseAge": "3 days",
+  "internalChecksFilter": "strict",
   "osvVulnerabilityAlerts": true,
 
   "labels": [
@@ -42,6 +44,11 @@
       "groupName": "python-runtime",
       "separateMinorPatch": true,
       "allowedVersions": "<3.13"
+    },
+    {
+      "description": "Do not auto consume package versions immediately after publication.",
+      "matchDatasources": ["pypi"],
+      "minimumReleaseAge": "7 days"
     },
     {
       "description": "Enforce minimum version for expected node24 runtime",

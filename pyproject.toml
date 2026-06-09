@@ -295,6 +295,7 @@ managed = true
 default-groups = ["dev"]
 required-version = "==0.11.18"
 package = false
+exclude-newer = "1 week"
 # --- Prevent resolution and installation (direct + transitive)
 exclude-dependencies = [
     "uv",  # Exclude `uv` package, prefer standalone global binary.
