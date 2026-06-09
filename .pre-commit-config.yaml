@@ -9,7 +9,7 @@ ci:
     autoupdate_branch: ''
     autoupdate_commit_msg: 'chore(pre-commit.ci): Upgrade hook versions'
     autoupdate_schedule: weekly
-    skip: []
+    skip: [renovate-config-validator]
     submodules: false
 
 repos:
