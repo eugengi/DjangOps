@@ -1,7 +1,5 @@
 fail_fast: false
 exclude: migrations/
-default_language_version:
-    python: python3.12.13
 
 ci:
     autofix_commit_msg: |
@@ -123,6 +121,7 @@ repos:
       # Warn if uv lockfile is not up-to-date.
       -   id: uv-lock
           args: ['--check']
+          language_version: 3.12.13
 
   # Config file validators
   -   repo: https://github.com/renovatebot/pre-commit-hooks
