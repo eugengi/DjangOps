@@ -10,9 +10,12 @@
   "assignees": ["eugengi"],
   "reviewers": ["eugengi"],
   "rangeStrategy": "in-range-only",
-  "prConcurrentLimit": 10,
-  "schedule": ["at any time"],
+
+  "prConcurrentLimit": 4,
+  "schedule": ["after 6am and before 10pm every weekday"],
   "timezone": "Africa/Nairobi",
+
+  "osvVulnerabilityAlerts": true,
 
   "labels": [
     "dependencies",
@@ -20,37 +23,54 @@
     "upgrades"
   ],
 
+  "lockFileMaintenance": {
+    "enabled": true,
+    "schedule": ["before 6am on monday"]
+  },
+
   "packageRules": [
     {
+      "description": "Pin digests for dockerfile and docker-compose managers",
+      "matchManagers": ["dockerfile", "docker-compose"],
+      "matchDatasources": ["docker"],
+      "pinDigests": true
+    },
+    {
+      "description": "Enforce limit on core python version file",
       "matchPackageNames": ["python"],
       "matchManagers": ["dockerfile", "github-actions"],
       "versioning": "pep440",
       "allowedVersions": "<3.13.0"
     },
     {
+      "description": "Enforce minimum version for expected node24 runtime",
       "matchManagers": ["github-actions"],
       "matchPackageNames": ["actions/checkout"],
       "allowedVersions": ">=6"
     },
     {
+      "description": "Group core, runtime packages to reduce friction",
       "matchManagers": ["pep621"],
       "matchDepTypes": [
         "project.dependencies",
-        "project.optional-dependencies"
+        "dependency-groups.prod"
       ],
+      "groupName": "project-core-deps",
       "rangeStrategy": "in-range-only",
-      "addLabels": ["core", "critical"]
+      "addLabels": ["core", "runtime"]
     },
     {
+      "description": "Group and throttle non-critical packages to reduce friction",
       "matchManagers": ["pep621"],
       "matchDepTypes": [
         "dependency-groups.ci",
         "dependency-groups.dev",
-        "dependency-groups.prod",
         "dependency-groups.quality",
         "dependency-groups.test"
       ],
+      "groupName": "project-local-deps",
       "rangeStrategy": "bump",
+      "schedule": ["before 4am on monday"],
       "addLabels": ["local", "tools"]
     }
   ],
