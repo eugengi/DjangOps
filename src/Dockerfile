@@ -34,6 +34,8 @@ ENV APP=$BASE/src
 # set pkg-manger specific env variables.
 ENV UV_COMPILE_BYTECODE=1 \
     UV_PROJECT_ENVIRONMENT="/usr/local" \
+    UV_PYTHON_DOWNLOADS=never \
+    UV_PYTHON_PREFERENCE=only-system \
     UV_LINK_MODE=copy \
     UV_NO_DEV=1 \
     UV_CACHE_DIR="/root/.cache/uv"
