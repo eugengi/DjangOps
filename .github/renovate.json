@@ -80,6 +80,49 @@
       "rangeStrategy": "bump",
       "schedule": ["before 4am on monday"],
       "addLabels": ["local", "tools"]
+    },
+    {
+      "description": "Maintain `uv` version parity with atomic update across repo",
+      "matchPackageNames": ["astral-sh/uv"],
+      "matchDatasources": ["github-releases"],
+      "groupName": "uv toolchain",
+      "commitMessageTopic": "uv toolchain",
+      "minimumReleaseAge": "7 days"
+    },
+    {
+      "description": "No automerge policy for tier-0 or build-critical supply chain deps",
+      "matchPackageNames": ["astral-sh/uv"],
+      "automerge": false
+    }
+  ],
+
+  "customManagers": [
+    {
+      "customType": "regex",
+      "description": "Track and update uv version ARG in Dockerfiles",
+      "managerFilePatterns": [
+        "/(^|/|\\.)([Dd]ocker|[Cc]ontainer)file$/",
+        "/(^|/)([Dd]ocker|[Cc]ontainer)file[^/]*$/"
+      ],
+      "matchStrings": [
+        "ARG\\s+UV_VERSION=\"(?<currentValue>[^@\"]*)(?:@(?<currentDigest>sha256:[a-f0-9]{64}))?\""
+      ],
+      "depNameTemplate": "uv",
+      "packageNameTemplate": "astral-sh/uv",
+      "datasourceTemplate": "github-releases",
+      "versioningTemplate": "semver"
+    },
+    {
+      "customType": "regex",
+      "description": "Locate and update `tool.uv.required-version` in pyproject.toml",
+      "managerFilePatterns": ["/(^|/)pyproject\\.toml$/"],
+      "matchStrings": [
+        "(?m)^\\[tool\\.uv\\][\\s\\S]*?required-version\\s*=\\s*[\"'](?:==)?(?<currentValue>[0-9A-Za-z.+-]+)[\"']"
+      ],
+      "depNameTemplate": "uv",
+      "packageNameTemplate": "astral-sh/uv",
+      "datasourceTemplate": "github-releases",
+      "versioningTemplate": "semver"
     }
   ],
 
