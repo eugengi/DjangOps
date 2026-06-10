@@ -9,7 +9,7 @@ ci:
     autoupdate_branch: ''
     autoupdate_commit_msg: 'chore(pre-commit.ci): Upgrade hook versions'
     autoupdate_schedule: weekly
-    skip: [renovate-config-validator]
+    skip: [renovate-config-validator, uv-lock]
     submodules: false
 
 repos:
@@ -121,7 +121,6 @@ repos:
       # Warn if uv lockfile is not up-to-date.
       -   id: uv-lock
           args: ['--check']
-          language_version: python3.12
 
   # Config file validators
   -   repo: https://github.com/renovatebot/pre-commit-hooks
