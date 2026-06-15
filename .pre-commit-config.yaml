@@ -9,7 +9,7 @@ ci:
     autoupdate_branch: ''
     autoupdate_commit_msg: 'chore(pre-commit.ci): Upgrade hook versions'
     autoupdate_schedule: weekly
-    skip: [renovate-config-validator]
+    skip: [renovate-config-validator, uv-lock]
     submodules: false
 
 repos:
@@ -114,17 +114,21 @@ repos:
       -   id: codespell
           files: \.(py|sh|md|rst|yml|yaml)$
 
-  # Package manager, Dependencies
-  -   repo: https://github.com/astral-sh/uv-pre-commit
-      rev: 0.11.19
-      hooks:
-      # Warn if uv lockfile is not up-to-date.
-      -   id: uv-lock
-          args: ['--check']
-
   # Config file validators
   -   repo: https://github.com/renovatebot/pre-commit-hooks
       rev: 43.216.1
       hooks:
       -   id: renovate-config-validator
           args: [--strict]
+
+  # Package manager, Dependencies
+  -   repo: local
+      hooks:
+      -   id: uv-lock
+          name: uv-lock
+          description: "Check 'uv.lock' is in sync with project dependencies"
+          entry: bash -c 'if ! uv lock --check 2>/dev/null; then uv lock || exit $?; exit 1; fi'
+          language: system
+          files: ^(uv\.lock|pyproject\.toml|uv\.toml)$
+          pass_filenames: true
+          additional_dependencies: []

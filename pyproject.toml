@@ -295,6 +295,10 @@ managed = true
 default-groups = ["dev"]
 required-version = "==0.11.18"
 package = false
+python-downloads = "manual"
+python-preference = "system"
+exclude-newer = "1 week"
+
 # --- Prevent resolution and installation (direct + transitive)
 exclude-dependencies = [
     "uv",  # Exclude `uv` package, prefer standalone global binary.
