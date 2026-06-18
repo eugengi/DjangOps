@@ -1,14 +1,14 @@
 ---
-# Reusable workflow — Build
+# Reusable worker workflow — Build
 #
-# Prepares tox environments across the Python × Django version matrix.
+# Prepares tox environment for the target Python and Django version.
 # Intended to be called exclusively from ci.yaml; do not add triggers here.
 #
 # The caller (ci.yaml) owns change detection and status surfacing.
 # This workflow owns only the build matrix and its steps.
 #
-# Matrix sync: the Python × Django matrix defined here MUST remain identical
-# to the one in _test.yaml.  If you add or remove a version here, update
+# [!] Matrix sync: the Python and Django version defined here MUST remain identical
+# to the one in _test.yaml. If you add or remove a version here, update
 # _test.yaml in the same commit.
 #
 
@@ -39,7 +39,6 @@ jobs:
           - "3.12"
         django-version:
           - django42
-          - django50
 
     steps:
       - name: Checkout code

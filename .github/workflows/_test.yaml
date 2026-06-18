@@ -1,16 +1,16 @@
 ---
 # Reusable worker workflow — Test
 #
-# Runs the test suite across the Python × Django version matrix.
+# Runs the test suite against the target Python and Django version.
 # Intended to be called exclusively from ci.yaml after a successful build;
 # do NOT add triggers here.
 #
 # The caller (ci.yaml) owns change detection, build sequencing, and status
-# surfacing. This workflow owns the test matrix, Postgres service, and all
+# surfacing. This workflow owns the test matrix, services, and all
 # test environment configuration.
 #
-# [!] Matrix sync: the Python × Django matrix here MUST remain identical
-# to the one in _build.yaml.  If you add or remove a version here, update
+# [!] Matrix sync: the Python and Django version here MUST remain identical
+# to the one in _build.yaml. If you add or remove a version here, update
 # _build.yaml in the same commit.
 #
 
@@ -41,7 +41,6 @@ jobs:
           - "3.12"
         django-version:
           - django42
-          - django50
 
     steps:
       - name: Checkout code
