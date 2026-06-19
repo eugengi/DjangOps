@@ -7,33 +7,12 @@ Note:
     host and manage their own `enums.py` module for easier app deploys.
 """
 
-from enum import Enum, auto, unique
+from enum import StrEnum, auto, unique
 from typing import NoReturn
 
-from typing_extensions import LiteralString
 
-
-class BaseStrEnum(str, Enum):
-    """Base class for the project's enum string constants.
-
-    Disclaimer:
-        This class runs type conversion, str(v), on member assigned values
-        but does not validate initial values are of type:string.
-
-    Note:
-        Thanks to @artbataev, for inspiring this implementation!
-        See: https://github.com/NVIDIA/NeMo/blob/main/nemo/utils/enum.py#L18
-    """
-
-    @staticmethod
-    def _generate_next_value_(
-        name: str,
-        start: int,
-        count: int,
-        last_values: list[str],
-    ) -> LiteralString:
-        """Return the lower-cased version of the member name."""
-        return name.lower()
+class BaseStrEnum(StrEnum):
+    """Base class for the project's enum string constants."""
 
     @classmethod
     def _missing_(cls, value: object) -> NoReturn:
@@ -43,9 +22,6 @@ class BaseStrEnum(str, Enum):
             Valid choices: {choices}
             """
         raise ValueError(errmsg)
-
-    def __str__(self) -> LiteralString:
-        return str(self.value)
 
 
 @unique

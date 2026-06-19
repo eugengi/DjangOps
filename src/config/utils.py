@@ -8,8 +8,9 @@ Note:
     host and manage their own `utils` module for easier app deploys.
 """
 
+from typing import LiteralString
+
 from django.core.exceptions import ImproperlyConfigured
-from typing_extensions import LiteralString
 
 from config.constants import SETTINGS_MODULE
 from config.enums import Environment

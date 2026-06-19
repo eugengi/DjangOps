@@ -14,7 +14,6 @@ https://docs.gunicorn.org/en/stable/settings.html
 """
 
 import multiprocessing
-from typing import TypeAlias
 
 import environ  # type: ignore[import-not-found]
 
@@ -44,7 +43,7 @@ env = environ.Env(  # type: ignore[misc]
 
 # == Logging ===================================================================
 
-File: TypeAlias = str
+type File = str
 
 accesslog: File = env("GUNICORN_ACCESS_LOG")
 errorlog: File = env("GUNICORN_ERROR_LOG")

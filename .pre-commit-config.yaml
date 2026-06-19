@@ -1,6 +1,9 @@
 fail_fast: false
 exclude: migrations/
 
+default_language_version:
+    python: python3.12
+
 ci:
     autofix_commit_msg: |
         style(pre-commit.ci): Patch auto-fixes from hooks
@@ -43,6 +46,7 @@ repos:
       rev: 26.5.1
       hooks:
       -   id: black
+          args: [--target-version, "py312"]
 
   -   repo: https://github.com/PyCQA/isort
       rev: 9.0.0a3
