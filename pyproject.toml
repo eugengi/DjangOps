@@ -26,7 +26,7 @@ maintainers = [
 ]
 
 dependencies = [
-    "django>=4.2.30,<5.0",
+    "django>=5.2.15,<6.0",
     "django-environ>=0.13.0,<1.0",
     "psycopg[binary]>=3.3.4,<4.0",
 ]

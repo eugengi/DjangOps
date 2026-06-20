@@ -4,7 +4,7 @@ Define required base `database` settings, shareable across
 target environments for the Django project.
 
 See:
-https://docs.djangoproject.com/en/4.2/ref/settings/#databases
+https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 """
 
 from config.settings.environment.database import (

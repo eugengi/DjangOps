@@ -11,7 +11,7 @@ inputs:
     required: true
   django-version:
     description: |
-      Tox Django environment name from matrix (e.g. "django42");
+      Tox Django environment name from matrix (e.g. "django52");
       See tox config file, tox.ini, at project root directory.
     required: true
 

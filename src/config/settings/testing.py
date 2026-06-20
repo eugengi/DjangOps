@@ -11,7 +11,7 @@ Note:
     execution only and do not use your “real” (production) database.
 
 For more information on this file, see
-https://docs.djangoproject.com/en/4.2/topics/settings/
+https://docs.djangoproject.com/en/5.2/topics/settings/
 """
 
 import os

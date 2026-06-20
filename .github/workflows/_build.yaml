@@ -38,7 +38,7 @@ jobs:
         python-version:
           - "3.12"
         django-version:
-          - django42
+          - django52
 
     steps:
       - name: Checkout code
