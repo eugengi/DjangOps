@@ -1,10 +1,10 @@
-# syntax=docker/dockerfile:1
+# syntax=docker/dockerfile:1@sha256:87999aa3d42bdc6bea60565083ee17e86d1f3339802f543c0d03998580f9cb89
 
 # This build-specific ARG is named `TARGET`
 # to avoid conflict with Django's ENV `ENVIRONMENT`,
 # which determines app settings to use.
 ARG TARGET=production
-ARG UV_VERSION="0.11.14"
+ARG UV_VERSION="0.11.14@sha256:1025398289b62de8269e70c45b91ffa37c373f38118d7da036fb8bb8efc85d97"
 ARG PYTHON_VERSION="3.12.13"
 ARG ALPINE_VERSION="3.23"
 
