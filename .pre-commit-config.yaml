@@ -36,7 +36,7 @@ repos:
 
   # Framework
   -   repo: https://github.com/adamchainz/django-upgrade
-      rev: 1.30.0
+      rev: 1.31.1
       hooks:
       -   id: django-upgrade
           args: [--target-version, "5.2"]
@@ -66,7 +66,7 @@ repos:
 
   # Linting
   -   repo: https://github.com/astral-sh/ruff-pre-commit
-      rev: v0.15.18
+      rev: v0.15.20
       hooks:
       -   id: ruff-check
           args: [--fix]
@@ -100,7 +100,7 @@ repos:
 
   # Documentation, Spelling
   -   repo: https://github.com/alessandrojcm/commitlint-pre-commit-hook
-      rev: v9.25.0
+      rev: v9.26.0
       hooks:
       -   id: commitlint
           stages: [commit-msg]
@@ -120,7 +120,7 @@ repos:
 
   # Config file validators
   -   repo: https://github.com/renovatebot/pre-commit-hooks
-      rev: 43.235.1
+      rev: 43.248.0
       hooks:
       -   id: renovate-config-validator
           args: [--strict]
