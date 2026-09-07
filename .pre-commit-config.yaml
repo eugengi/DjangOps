@@ -36,7 +36,7 @@ repos:
 
   # Framework
   -   repo: https://github.com/adamchainz/django-upgrade
-      rev: 1.31.1
+      rev: 1.32.0
       hooks:
       -   id: django-upgrade
           args: [--target-version, "5.2"]
@@ -49,7 +49,7 @@ repos:
           args: [--target-version, "py312"]
 
   -   repo: https://github.com/PyCQA/isort
-      rev: 9.0.0b1
+      rev: 9.0.1
       hooks:
       -   id: isort
           args: [
@@ -60,32 +60,32 @@ repos:
           ]
 
   -   repo: https://github.com/maxwinterstein/shfmt-py
-      rev: v4.0.0
+      rev: v4.2.0
       hooks:
       -   id: shfmt
 
   # Linting
   -   repo: https://github.com/astral-sh/ruff-pre-commit
-      rev: v0.15.22
+      rev: v0.16.6
       hooks:
       -   id: ruff-check
           args: [--fix]
           exclude: ^(test_utils/|migrations/|setup\.py)$
 
   -   repo: https://github.com/AleksaC/hadolint-py
-      rev: v2.14.0
+      rev: v2.15.1
       hooks:
       -   id: hadolint
           args: [--config, .hadolint.yaml]
 
   -   repo: https://github.com/shellcheck-py/shellcheck-py
-      rev: v0.11.0.1
+      rev: v0.11.0.1-1
       hooks:
       -   id: shellcheck
 
   # Code Quality
   -   repo: https://github.com/pre-commit/mirrors-mypy
-      rev: v2.3.0
+      rev: v2.3.1
       hooks:
       -   id: mypy
           args: [--config-file, pyproject.toml, --warn-unused-configs]
@@ -120,7 +120,7 @@ repos:
 
   # Config file validators
   -   repo: https://github.com/renovatebot/pre-commit-hooks
-      rev: 43.272.5
+      rev: 44.69.5
       hooks:
       -   id: renovate-config-validator
           args: [--strict]
