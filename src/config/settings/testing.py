@@ -1,4 +1,4 @@
-# ruff: noqa: F401, F405
+# ruff: noqa: F401
 """Django `test` settings for config project.
 
 Testing target settings for the Django project inherited
@@ -16,7 +16,7 @@ https://docs.djangoproject.com/en/5.2/topics/settings/
 
 import os
 
-from config.settings.common.base import *  # noqa: F403
+from config.settings.common.base import *
 from config.settings.common.database import DATABASES
 from config.settings.environment.django import (
     ALLOWED_HOSTS,
